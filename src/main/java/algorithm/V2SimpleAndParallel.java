@@ -31,11 +31,11 @@ public class V2SimpleAndParallel extends AbstractBaseAlgo {
 
     @Override
     public void findPopulation() {
-        long popInArea = _queryPopulation();
+        this.popInArea = _queryPopulation();
         System.out.println("Total Population in the Area: " + popInArea);
         System.out.println("Total Population: " + totalPopulation);
-        float percent = ((float) popInArea * 100)/totalPopulation.floatValue();
-        System.out.printf("Percent of total population: %.2f \n",percent);
+        this.popPercent = ((float) popInArea * 100)/totalPopulation.floatValue();
+        System.out.printf("Percent of total population: %.2f \n", popPercent);
 
     }
 

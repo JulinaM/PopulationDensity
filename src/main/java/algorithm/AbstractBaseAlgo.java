@@ -16,6 +16,10 @@ abstract public class AbstractBaseAlgo implements BaseAlgo{
 
     protected Rectangle usRectangle;
     protected Rectangle inputRecBoundary;
+    protected long popInArea;
+    protected float popPercent;
+
+
 
     AbstractBaseAlgo(Integer x, Integer y, CensusData censusData) {
         this.x = x;

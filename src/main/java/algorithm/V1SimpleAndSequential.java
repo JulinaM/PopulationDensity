@@ -25,15 +25,15 @@ public class V1SimpleAndSequential extends AbstractBaseAlgo {
     }
 
     public void findPopulation() {
-        long popInArea = _queryPopulation();
+        this.popInArea = _queryPopulation();
         System.out.println("Total Population in the Area: " + popInArea);
         System.out.println("Total Population: " + totalPopulation);
-        float percent = ((float) popInArea * 100)/totalPopulation.floatValue();
-        System.out.printf("Percent of total population: %.2f \n",percent);
+        this.popPercent = ((float) popInArea * 100)/totalPopulation.floatValue();
+        System.out.printf("Percent of total population: %.2f \n", popPercent);
 
     }
 
-    private long _queryPopulation(){
+    protected long _queryPopulation(){
         double westBound = (usRectangle.left + (inputRecBoundary.left - 1) * (usRectangle.right - usRectangle.left) / x);
         double eastBound = (usRectangle.left + (inputRecBoundary.right) * (usRectangle.right - usRectangle.left) / x);
         double northBound = (usRectangle.bottom + (inputRecBoundary.top) * (usRectangle.top - usRectangle.bottom) / y);
