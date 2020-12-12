@@ -59,18 +59,6 @@ abstract public class AbstractBaseAlgo implements BaseAlgo{
         return ReturnType.DONE;
     }
 
-
-    long queryPopulation(){
-        double westBound = (usRectangle.left + (inputRecBoundary.left - 1) * (usRectangle.right - usRectangle.left) / x);
-        double eastBound = (usRectangle.left + (inputRecBoundary.right) * (usRectangle.right - usRectangle.left) / x);
-        double northBound = (usRectangle.bottom + (inputRecBoundary.top) * (usRectangle.top - usRectangle.bottom) / y);
-        double southBound = (usRectangle.bottom + (inputRecBoundary.bottom - 1) * (usRectangle.top - usRectangle.bottom) / y);
-        return calculatePopulation(westBound, eastBound, northBound, southBound);
-    }
-
-    abstract public long calculatePopulation(double westBound, double eastBound, double northBound, double southBound);
-
-
     abstract public void findUSRectangle();
 
     abstract public void findPopulation();

@@ -18,19 +18,20 @@ public class V2SimpleAndParallel extends AbstractBaseAlgo {
         this.cutoff = cutoff;
     }
 
+    @Override
     public void findUSRectangle() {
         if (censusData.data_size == 0)
             return;
 
         Result res = ForkJoinPool.commonPool().invoke(new Preprocessor(0, censusData.data_size));
         usRectangle = res.rec;
-
         totalPopulation = (long) res.population;
     }
 
 
+    @Override
     public void findPopulation() {
-        long popInArea = queryPopulation();
+        long popInArea = _queryPopulation();
         System.out.println("Total Population in the Area: " + popInArea);
         System.out.println("Total Population: " + totalPopulation);
         float percent = ((float) popInArea * 100)/totalPopulation.floatValue();
@@ -38,7 +39,11 @@ public class V2SimpleAndParallel extends AbstractBaseAlgo {
 
     }
 
-    public long calculatePopulation(double westBound, double eastBound, double northBound, double southBound) {
+    private long _queryPopulation(){
+        double westBound = (usRectangle.left + (inputRecBoundary.left - 1) * (usRectangle.right - usRectangle.left) / x);
+        double eastBound = (usRectangle.left + (inputRecBoundary.right) * (usRectangle.right - usRectangle.left) / x);
+        double northBound = (usRectangle.bottom + (inputRecBoundary.top) * (usRectangle.top - usRectangle.bottom) / y);
+        double southBound = (usRectangle.bottom + (inputRecBoundary.bottom - 1) * (usRectangle.top - usRectangle.bottom) / y);
         return (long) ForkJoinPool.commonPool().invoke(new Query(0, censusData.data_size, westBound, eastBound, northBound, southBound));
     }
 
@@ -59,12 +64,10 @@ public class V2SimpleAndParallel extends AbstractBaseAlgo {
             if(hi - lo <  cutoff) {
                 CensusGroup group = censusData.data[lo];
                 int pop = group.population;
-                Rectangle rec = new Rectangle(group.longitude, group.longitude,
-                        group.latitude, group.latitude), temp;
+                Rectangle rec = new Rectangle(group.longitude, group.longitude, group.latitude, group.latitude), temp;
                 for (int i = lo + 1; i < hi; i++) {
                     group = censusData.data[i];
-                    temp = new Rectangle(group.longitude, group.longitude,
-                            group.latitude, group.latitude);
+                    temp = new Rectangle(group.longitude, group.longitude, group.latitude, group.latitude);
                     rec = rec.encompass(temp);
                     pop += group.population;
                 }
@@ -76,8 +79,7 @@ public class V2SimpleAndParallel extends AbstractBaseAlgo {
                 left.fork(); // fork a thread and calls compute
                 Result rightAns = right.compute();//call compute directly
                 Result leftAns = left.join();
-                return new Result(rightAns.rec.encompass(leftAns.rec),
-                        rightAns.population + leftAns.population);
+                return new Result(rightAns.rec.encompass(leftAns.rec), rightAns.population + leftAns.population);
             }
 
         }
@@ -113,20 +115,16 @@ public class V2SimpleAndParallel extends AbstractBaseAlgo {
                     groupLat = group.latitude;
                     // Defaults to North and/or East in case of tie
                     if (groupLat >= bottomBound &&
-                            (groupLat < topBound ||
-                                    (topBound - usRectangle.top) >= 0) &&
-                            (groupLong < rightBound ||
-                                    (rightBound - usRectangle.right) >= 0) &&
-                            groupLong >= leftBound)
+                            (groupLat < topBound || (topBound - usRectangle.top) >= 0) &&
+                            (groupLong < rightBound || (rightBound - usRectangle.right) >= 0) &&
+                             groupLong >= leftBound)
                         population += group.population;
                 }
 
                 return population;
             } else {
-                Query left =
-                        new Query(lo, (hi+lo)/2, leftBound, rightBound, topBound, bottomBound);
-                Query right =
-                        new Query((hi+lo)/2, hi, leftBound, rightBound, topBound, bottomBound);
+                Query left = new Query(lo, (hi+lo)/2, leftBound, rightBound, topBound, bottomBound);
+                Query right = new Query((hi+lo)/2, hi, leftBound, rightBound, topBound, bottomBound);
 
                 left.fork(); // fork a thread and calls compute
                 Integer rightAns = right.compute(); // call compute directly

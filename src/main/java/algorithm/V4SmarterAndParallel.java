@@ -20,7 +20,10 @@ public class V4SmarterAndParallel extends V2SimpleAndParallel {
     @Override
     public void findUSRectangle() {
         super.findUSRectangle();
+        _createGrid();
+    }
 
+    private void _createGrid(){
         grid = ForkJoinPool.commonPool().invoke(new SmarterPreprocessor(0, censusData.data_size));
 
         // sum top edge (of graph)
@@ -42,7 +45,7 @@ public class V4SmarterAndParallel extends V2SimpleAndParallel {
 
     @Override
     public void findPopulation() {
-        long popInArea = queryPopulation();
+        long popInArea = _queryPopulation();
         System.out.println("Total Population in the Area: " + popInArea);
         System.out.println("Total Population: " + totalPopulation);
         float percent = ((float) popInArea * 100)/totalPopulation.floatValue();
@@ -50,8 +53,7 @@ public class V4SmarterAndParallel extends V2SimpleAndParallel {
 
     }
 
-    @Override
-    public long queryPopulation() {
+    private long _queryPopulation() {
         long totalPopulationInArea = 0L;
         totalPopulationInArea += grid[(int) (inputRecBoundary.right - 1)][(int) (inputRecBoundary.bottom - 1)];
         totalPopulationInArea -= (inputRecBoundary.top == y ? 0 : grid[(int) (inputRecBoundary.right- 1)][(int) inputRecBoundary.top]); // top right

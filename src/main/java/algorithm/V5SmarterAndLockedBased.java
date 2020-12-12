@@ -51,7 +51,7 @@ public class V5SmarterAndLockedBased extends V2SimpleAndParallel {
     // An internal class for preprocessing
     class SmarterPreprocessor extends java.lang.Thread {
         int hi, lo;
-        // Look at data from lo (inlcusive) to hi (exclusive)
+        // Look at data from lo (inclusive) to hi (exclusive)
         SmarterPreprocessor(int lo, int hi) {
             this.lo  = lo;
             this.hi = hi;

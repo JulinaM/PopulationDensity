@@ -87,10 +87,10 @@ public class PopulationQuery {
             Class<?> clazz = Class.forName(algorithms.get(version));
             Constructor<?> constructor = clazz.getConstructor(Integer.class, Integer.class, CensusData.class);
             BaseAlgo algorithm = (BaseAlgo) constructor.newInstance(x, y, censusData);
-            long startProcessTimeV1 = System.nanoTime();
+            long startProcessTime = System.nanoTime();
             algorithm.findUSRectangle();
-            long endProcessTimeV1 = System.nanoTime();
-            System.out.println("Total PreProcessing Time: " + (endProcessTimeV1 - startProcessTimeV1)+"ns");
+            long endProcessTime = System.nanoTime();
+            System.out.println("Total PreProcessing Time: " + (endProcessTime - startProcessTime)+"ns");
             BaseAlgo.ReturnType returnType1;
             do {
                 returnType1 = algorithm.takeInput();

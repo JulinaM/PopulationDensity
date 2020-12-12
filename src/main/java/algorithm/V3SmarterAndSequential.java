@@ -23,14 +23,13 @@ public class V3SmarterAndSequential extends AbstractBaseAlgo {
         long pop = 0;
         CensusGroup group = censusData.data[0];
 
-        Rectangle rec = new Rectangle(group.longitude, group.longitude,
-                group.latitude, group.latitude), temp;
+        Rectangle rec = new Rectangle(group.longitude, group.longitude, group.latitude, group.latitude);
+        Rectangle temp;
         pop += group.population;
 
         for (int i = 1; i < censusData.data_size; i++) {
             group = censusData.data[i];
-            temp = new Rectangle(group.longitude, group.longitude,
-                    group.latitude, group.latitude);
+            temp = new Rectangle(group.longitude, group.longitude, group.latitude, group.latitude);
             rec = rec.encompass(temp);
             pop += group.population;
         }
@@ -81,7 +80,7 @@ public class V3SmarterAndSequential extends AbstractBaseAlgo {
 
     @Override
     public void findPopulation() {
-        long popInArea = queryPopulation();
+        long popInArea = _queryPopulation();
 
         System.out.println("Total Population in the Area: " + popInArea);
         System.out.println("Total Population: " + totalPopulation);
@@ -90,19 +89,13 @@ public class V3SmarterAndSequential extends AbstractBaseAlgo {
 
     }
 
-    @Override
-    public long queryPopulation() {
+    private long _queryPopulation() {
         long totalPopulationInArea = 0L;
         totalPopulationInArea += grid[(int) (inputRecBoundary.right - 1)][(int) (inputRecBoundary.bottom - 1)];
         totalPopulationInArea -= (inputRecBoundary.top == y ? 0 : grid[(int) (inputRecBoundary.right- 1)][(int) inputRecBoundary.top]); // top right
         totalPopulationInArea -= (inputRecBoundary.left == 1 ? 0 : grid[(int) (inputRecBoundary.left- 1 - 1)][(int) (inputRecBoundary.bottom - 1)]); // bottom left
         totalPopulationInArea += (inputRecBoundary.left == 1 || inputRecBoundary.top == y ? 0 : grid[(int) (inputRecBoundary.left - 1 - 1)][(int) inputRecBoundary.top]); // top left
         return totalPopulationInArea;
-    }
-
-    @Override
-    public long calculatePopulation(double westBound, double eastBound, double northBound, double southBound) {
-        return 0;
     }
 
 }
