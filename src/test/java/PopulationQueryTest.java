@@ -4,10 +4,11 @@ import base.CensusData;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Test {
+public class PopulationQueryTest {
     static final Map<String, String> algorithms = new HashMap<String, String>(){
         {
             put("-v1", "algorithm.V1SimpleAndSequential");
@@ -20,8 +21,8 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            String fileName = "/Users/julinamaharjan/Downloads/PopulationDensity/src/main/resources/CenPop2010.txt";
-            CensusData censusData = PopulationQuery.parse(fileName);
+            String absolutePath = Paths.get("src","main","resources").toFile().getAbsolutePath();
+            CensusData censusData = PopulationQuery.parse(absolutePath+"/CenPop2010.txt");
             Class<?>   clazz = Class.forName(algorithms.get("-v5"));
             Constructor<?> constructor = clazz.getConstructor(Integer.class, Integer.class, CensusData.class);
             BaseAlgo algorithm = (BaseAlgo) constructor.newInstance(100, 500, censusData);

@@ -18,4 +18,9 @@ public class CensusGroup {
 		//System.out.println(lat + " -> " + x);
 		return x;
 	}
+
+	@Override
+	public String toString() {
+		return "[\"latitude\": "+ latitude+ ", realLatitude: " + realLatitude + ", \"longitude\": " +longitude + ", pop: " + population+ " ]";
+	}
 }
